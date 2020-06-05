@@ -1,41 +1,30 @@
 <template>
   <v-app>
-    <v-app-bar
-      app
-      color="primary"
-      dark
-    >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
+    
+    <!-- AppBar ↓ -->
 
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
+        <v-app-bar
+          absolute
+          color="#fcb69f"
+          dark
+          hide-on-scroll
+          prominent
+          src="@/assets/girasolesbar.png"
+        >
+          <template v-slot:img="{ props }">
+            <v-img
+              v-bind="props"
+              gradient="to top right, rgba(19,84,122,.5), rgba(128,208,199,.8)"
+            ></v-img>
+          </template>
 
-      <v-spacer></v-spacer>
+          <v-toolbar-title>Lencería Sunflower</v-toolbar-title>
 
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>open_in_new</v-icon>
-      </v-btn>
-    </v-app-bar>
+          <v-spacer></v-spacer>
+
+        </v-app-bar>
+    
+    <!-- AppBar ↑ -->
 
     <v-content>
       <HelloWorld/>
@@ -52,24 +41,19 @@
           flat
           tile
         >
-          <v-card-title class="amber lighten-2">
-            <strong class="subheading black--text">Visitanos en las siguientes plataformas!</strong>
 
-            <v-spacer></v-spacer>
-
+          <v-card-text class="py-2 gray--text text-center secondary">
+            {{ new Date().getFullYear() }} — <strong>Lencería Sunflower</strong>
+            
             <v-btn
               v-for="icon in social"
               :key="icon.icon"
-              class="mx-4 black--text"
+              class="ml-3"
               icon
               :href="icon.route" target="_blank"
             >
               <v-icon size="24px">{{ icon.icon }}</v-icon>
             </v-btn>
-          </v-card-title>
-
-          <v-card-text class="py-2 gray--text text-center secondary">
-            {{ new Date().getFullYear() }} — <strong>Lencería Sunflower</strong>
           </v-card-text>
         </v-card>
       </v-footer>
