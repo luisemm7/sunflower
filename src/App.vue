@@ -20,14 +20,22 @@
 
           <v-toolbar-title>Lencería Sunflower</v-toolbar-title>
 
-          <v-spacer></v-spacer>
+          <template v-slot:extension>
+            <v-tabs centered slider-color="primary">
+              <v-tab>Inicio</v-tab>
+              <v-tab>Clima</v-tab>
+              <v-tab>Politica</v-tab>
+            </v-tabs>
+          </template>
 
         </v-app-bar>
     
     <!-- AppBar ↑ -->
 
     <v-content>
-      <HelloWorld/>
+      <v-container>
+        <router-view/>
+      </v-container>
     </v-content>
 
     <!-- Footer ↓ -->
@@ -64,14 +72,10 @@
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
+
 
 export default {
   name: 'App',
-
-  components: {
-    HelloWorld,
-  },
 
   data: () => ({
     social: [
