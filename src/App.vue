@@ -21,10 +21,10 @@
           <v-toolbar-title>Lencería Sunflower</v-toolbar-title>
 
           <template v-slot:extension>
-            <v-tabs centered slider-color="primary">
-              <v-tab>Inicio</v-tab>
-              <v-tab>Clima</v-tab>
-              <v-tab>Politica</v-tab>
+            <v-tabs centered slider-color="primary" slider-size="4">
+              <v-tab to="/">Inicio</v-tab>
+              <v-tab to="/clima">Clima</v-tab>
+              <v-tab to="/about">Politica</v-tab>
             </v-tabs>
           </template>
 

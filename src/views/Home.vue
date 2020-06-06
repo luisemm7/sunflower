@@ -5,7 +5,7 @@
     
       <v-layout justify-center class="card1">
         <v-flex xs12 sm8 md6 lg5 xl4 >
-          <v-card shaped>
+          <v-card shaped elevation="9">
 
             <v-list-item>
               <v-list-item-content>
