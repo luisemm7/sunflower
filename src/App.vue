@@ -18,7 +18,9 @@
             ></v-img>
           </template>
 
-          <v-toolbar-title>Lencería Sunflower</v-toolbar-title>
+          <v-layout justify-center class="mt-5">
+            <v-toolbar-title>Lencería Sunflower</v-toolbar-title>
+          </v-layout>
 
           <template v-slot:extension>
             <v-tabs centered slider-color="primary" slider-size="4">

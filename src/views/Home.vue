@@ -5,19 +5,21 @@
     
       <v-layout justify-center class="card1">
         <v-flex xs12 sm8 md6 lg5 xl4 >
-          <v-card shaped elevation="9">
+          <v-card shaped elevation="9" class="text-center">
 
             <v-list-item>
               <v-list-item-content>
-                <v-list-item-title class="headline mb-1">Lencería Sunflower</v-list-item-title>
-              <v-list-item-subtitle></v-list-item-subtitle>
+                <v-list-item-title class="headline mb-2">Lencería Sunflower</v-list-item-title>
+              <v-list-item-subtitle>Puedes iniciar sesión para ver los demás productos con los que contamos.</v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
 
             <v-card-actions>
-              <v-btn class="ma-2" tile outlined color="success">
-                Iniciar sesión <v-icon>mdi-login</v-icon> 
-              </v-btn>
+              <v-layout justify-center>
+                <v-flex>
+                  <Popup />
+                </v-flex>
+              </v-layout>
             </v-card-actions>
 
           </v-card>
@@ -75,10 +77,11 @@
 
 <script>
 // @ is an alias to /src
-
+import Popup from '@/components/Popup'
 
   export default {
     name: 'Home',
+    components: {Popup},
     data() {
       return {
         products: [
