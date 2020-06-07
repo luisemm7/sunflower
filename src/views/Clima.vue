@@ -90,7 +90,6 @@ export default {
         if (results.message !== undefined){
           this.alerta = results.message;
           this.snackbar = true;
-          console.log('resultado:', results.message);
         }
       },
       /* Funcion para obtener la fecha */
