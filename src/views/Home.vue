@@ -14,13 +14,29 @@
               </v-list-item-content>
             </v-list-item>
 
-            <v-card-actions>
-              <v-layout justify-center>
-                <v-flex>
-                  <Popup />
-                </v-flex>
-              </v-layout>
-            </v-card-actions>
+            <template v-if="loggedIn">
+
+              <v-avatar>
+                <img :src="foto">
+              </v-avatar>
+              <p>Gracias por iniciar sesión{{' ' + nombre}}.</p>
+              <v-btn @click="signOut" class="ma-1" tile outlined color="error">
+                Cerrar sesión <v-icon>mdi-logout</v-icon> 
+              </v-btn>
+
+            </template>
+
+            <template v-else>
+            
+              <v-card-actions>
+                <v-layout justify-center>
+                  <v-flex>
+                    <Popup />
+                  </v-flex>
+                </v-layout>
+              </v-card-actions>
+
+            </template>
 
             <!-- Ordenador/sorter ↓ -->
               <p class="mt-2 mb-0 grey--text">
@@ -81,7 +97,7 @@
                   align="center"
                   justify="center"
                 >
-                  <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+                  <v-progress-circular indeterminate color="primary"></v-progress-circular>
                 </v-row>
               </template>
             
@@ -115,12 +131,44 @@
       </v-layout>
 
     <!-- Productos ↑ -->
+
+    <v-snackbar
+      multi-line
+      v-model="snackbar"
+      :timeout="4000"
+      color="success"
+    >
+      Gracias por iniciar sesión.
+      <v-btn
+        text
+        @click="snackbar = false"
+      >
+        Cerrar
+      </v-btn>
+    </v-snackbar>
+
+    <v-snackbar
+      multi-line
+      v-model="snackbar2"
+      :timeout="4000"
+      color="warning"
+    >
+      Sesión cerrada correctamente.
+      <v-btn
+        text
+        @click="snackbar2 = false"
+      >
+        Cerrar
+      </v-btn>
+    </v-snackbar>
+
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import Popup from '@/components/Popup'
+import fireauth from '@/Firebase'
 
   export default {
     name: 'Home',
@@ -137,13 +185,43 @@ import Popup from '@/components/Popup'
           { photo: '/Bras/b4-r.png', title: 'Set rosa', stars: 4.5, price: '290', text: 'Set completo color rosa de muy buena calidad' },
           { photo: '/Bras/b5-r.png', title: 'Set rojo', stars: 5, price: '295', text: 'Set completo color rojo muy buena calidad' },
           { photo: '/Bras/b6-p.png', title: 'Bra vainilla', stars: 3.5, price: '190', text: 'Bra color piel o algo asi, muy buena calidad' }
-        ]
+        ],
+        loggedIn: false,
+        snackbar: false,
+        snackbar2: false,
+        nombre: '',
+        foto: ''
       }
     },
+    created() {
+      fireauth.onAuthStateChanged(user => {
+        this.loggedIn = !!user;
+        var user1 = fireauth.currentUser;
+        var name,photoUrl;
+
+        if (user1 != null) {
+          this.snackbar = true;
+          name = user1.displayName;
+          photoUrl = user1.photoURL;
+          this.nombre = name;
+          this.foto = photoUrl;
+        }
+      })
+      
+    },
     methods: {
-      sortBy(prop){
+      sortBy(prop){ 
         this.products.sort((a,b) => a[prop] < b[prop] ? -1 : 1)
-      }
+      },
+      async signOut(){
+                try {
+                    await fireauth.signOut();
+                    this.loggedIn = false;
+                    this.snackbar2 = true;
+                }catch (err){
+                    console.log(err)
+                }
+            }
     },
   }
 
