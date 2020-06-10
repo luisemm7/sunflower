@@ -10,7 +10,7 @@
             <v-list-item>
               <v-list-item-content>
                 <v-list-item-title class="headline mb-2">Lencería Sunflower</v-list-item-title>
-                <p class="grey--text">Puedes iniciar sesión para ver los demás productos con los que contamos.</p>
+                <p v-bind:class="{'d-none': loggedIn}" class="grey--text">Puedes iniciar sesión para ver los demás productos con los que contamos.</p>
               </v-list-item-content>
             </v-list-item>
 
@@ -173,26 +173,7 @@ import fireauth from '@/Firebase'
   export default {
     name: 'Home',
     components: {Popup},
-    data() {
-      return {
-        products: [
-          { photo: '/Bras/b1-n.png', title: 'Set negro', stars: 3.5, price: '290', text: 'Set completo color negro muy buena calidad' },
-          { photo: '/Bras/b1-v.png', title: 'Set violeta', stars: 3, price: '285', text: 'Set completo color violeta o morado excelente calidad' },
-          { photo: '/Bras/b2-b.png', title: 'Bra blanco', stars: 4.5, price: '150', text: 'Bra sin barillas muy comodo' },
-          { photo: '/Bras/b2-p.png', title: 'Bra marron', stars: 2, price: '155', text: 'Bra color piel' },
-          { photo: '/Bras/b3-p.png', title: 'Bra piel', stars: 5, price: '190', text: 'Bra con rallas color piel' },
-          { photo: '/Bras/b3-r.png', title: 'Bra rosa', stars: 4, price: '195', text: 'Bra color rosa' },
-          { photo: '/Bras/b4-r.png', title: 'Set rosa', stars: 4.5, price: '290', text: 'Set completo color rosa de muy buena calidad' },
-          { photo: '/Bras/b5-r.png', title: 'Set rojo', stars: 5, price: '295', text: 'Set completo color rojo muy buena calidad' },
-          { photo: '/Bras/b6-p.png', title: 'Bra vainilla', stars: 3.5, price: '190', text: 'Bra color piel o algo asi, muy buena calidad' }
-        ],
-        loggedIn: false,
-        snackbar: false,
-        snackbar2: false,
-        nombre: '',
-        foto: ''
-      }
-    },
+
     created() {
       fireauth.onAuthStateChanged(user => {
         this.loggedIn = !!user;
@@ -206,8 +187,28 @@ import fireauth from '@/Firebase'
           this.nombre = name;
           this.foto = photoUrl;
         }
-      })
-      
+      })   
+    },
+
+    data() {
+      return {
+        products: [
+          { photo: '/Bras/b1-n.png', title: 'Set negro', stars: 3.5, price: '280', text: 'Set completo color negro muy buena calidad' },
+          { photo: '/Bras/b1-v.png', title: 'Set violeta', stars: 3, price: '230', text: 'Set completo color violeta o morado excelente calidad' },
+          { photo: '/Bras/b2-b.png', title: 'Bra blanco', stars: 4.5, price: '179', text: 'Bra sin barillas muy comodo' },
+          { photo: '/Bras/b2-p.png', title: 'Bra marron', stars: 2, price: '179', text: 'Bra color piel' },
+          { photo: '/Bras/b3-p.png', title: 'Bra piel', stars: 5, price: '199', text: 'Bra con rallas color piel' },
+          { photo: '/Bras/b3-r.png', title: 'Bra rosa', stars: 4, price: '199', text: 'Bra color rosa' },
+          { photo: '/Bras/b4-r.png', title: 'Set rosa', stars: 4.5, price: '280', text: 'Set completo color rosa de muy buena calidad' },
+          { photo: '/Bras/b5-r.png', title: 'Set rojo', stars: 5, price: '280', text: 'Set completo color rojo muy buena calidad' },
+          { photo: '/Bras/b6-p.png', title: 'Bra vainilla', stars: 3.5, price: '190', text: 'Bra color piel o algo asi, muy buena calidad' }
+        ],
+        loggedIn: false,
+        snackbar: false,
+        snackbar2: false,
+        nombre: '',
+        foto: ''
+      }
     },
     methods: {
       sortBy(prop){ 
