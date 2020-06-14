@@ -37,14 +37,18 @@
   v-model="snackbar"
   :timeout="4000"
   color="error"
+  rounded="pill"
 >
   {{ alerta }}
-  <v-btn
-    text
-    @click="snackbar = false"
-  >
-    Cerrar
-  </v-btn>
+  <template v-slot:action="{ on }">
+    <v-btn
+      v-bind="on"
+      text
+      @click="snackbar = false"
+    >
+      <v-icon>cancel</v-icon>
+    </v-btn>
+  </template>
 </v-snackbar>
 
 </v-layout>
@@ -155,7 +159,7 @@ export default {
 
   .weather-box .temp {
     display: inline-block;
-    padding: 50px 25px;
+    padding: 10px;
     color: azure;
     font-size: 102px;
     font-weight: 900;

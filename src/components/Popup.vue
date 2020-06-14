@@ -23,14 +23,18 @@
             v-model="snackbar"
             :timeout="4000"
             color="error"
+            rounded="pill"
             >
-            Ha ocurrido un error.
-            <v-btn
+            Hay un error, inténtelo nuevamente.
+            <template v-slot:action="{ on }">
+                <v-btn
+                v-bind="on"
                 text
                 @click="snackbar = false"
-            >
-                Cerrar
-            </v-btn>
+                >
+                <v-icon>cancel</v-icon>
+                </v-btn>
+            </template>
         </v-snackbar>
 
     </v-dialog>

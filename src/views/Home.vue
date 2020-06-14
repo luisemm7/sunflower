@@ -138,14 +138,18 @@
       v-model="snackbar"
       :timeout="4000"
       color="success"
+      rounded="pill"
     >
       Gracias por iniciar sesión.
-      <v-btn
-        text
-        @click="snackbar = false"
-      >
-        Cerrar
-      </v-btn>
+      <template v-slot:action="{ on }">
+        <v-btn
+          v-bind="on"
+          text
+          @click="snackbar = false"
+        >
+          <v-icon>cancel</v-icon>
+        </v-btn>
+      </template>
     </v-snackbar>
 
     <v-snackbar
@@ -153,14 +157,18 @@
       v-model="snackbar2"
       :timeout="4000"
       color="warning"
+      rounded="pill"
     >
       Sesión cerrada correctamente.
-      <v-btn
-        text
-        @click="snackbar2 = false"
-      >
-        Cerrar
-      </v-btn>
+      <template v-slot:action="{ on }">
+        <v-btn
+          v-bind="on"
+          text
+          @click="snackbar2 = false"
+        >
+          <v-icon>cancel</v-icon>
+        </v-btn>
+      </template>
     </v-snackbar>
 
   </div>
