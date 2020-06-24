@@ -296,7 +296,7 @@ import fireauth from '@/Firebase'
         var targetId = event.currentTarget.id;
         //console.log('id: ', targetId);
         this.idCart = targetId;
-        //console.log('idcart: ', this.idCart);
+        //console.log('idcart: ', this.idCart); a
       },
     },
 
