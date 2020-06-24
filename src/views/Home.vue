@@ -77,8 +77,8 @@
 
       <v-layout row wrap justify-center>
         <v-flex xs11 sm6 
-          v-for="product in products"
-          :key="product.photo"
+          v-for="(product,index) in products"
+          :key="product.id"
           :class="loggedIn === false && product.auth === true ? 'd-none' : ''"
         >
           <v-card
@@ -127,11 +127,64 @@
 
               <div>{{product.text}}</div>
             </v-card-text>
+
+            <!-- Add to cart ↓ -->
+
+              <v-card-actions>
+                <v-btn :id="index" color="success" outlined @click="dialogCart = true;" v-on:click="clickCart($event)" >
+                  <v-icon>mdi-cart-plus</v-icon>
+                </v-btn>
+              </v-card-actions>
+
+            <!-- Add to cart ↑ -->
+
           </v-card>
         </v-flex>
       </v-layout>
 
     <!-- Productos ↑ -->
+
+
+    <!-- PopupCart ↓ -->
+      <v-dialog 
+        v-model="dialogCart" 
+        width="90%"
+      >
+        <v-card class="pa-3">
+
+          <v-img
+            contain
+            class="secondary--text align-end"
+            :src="products[idCart].photo"
+          >
+
+            <v-card-title class="precio">${{products[idCart].price}}</v-card-title>
+
+          </v-img>
+
+          <v-card-subtitle class="pa-1">
+            {{products[idCart].title}}
+          </v-card-subtitle>
+
+          <v-card-text class="text--primary">
+            <div> {{products[idCart].text}} </div>
+          </v-card-text>
+          
+          <v-card-actions>
+
+            <v-btn
+              large
+              outlined
+              color="error"
+              @click="dialogCart = false"
+            >
+              <v-icon>close</v-icon>
+            </v-btn>
+  
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    <!-- PopupCart ↑ -->
 
     <v-snackbar
       multi-line
@@ -202,26 +255,28 @@ import fireauth from '@/Firebase'
     data() {
       return {
         products: [
-          { photo: '/Bras/b1-n.png', title: 'Set negro', stars: 3.5, price: '280', text: 'Set completo color negro muy buena calidad' },
-          { photo: '/Bras/b1-v.png', title: 'Set violeta', stars: 3, price: '230', text: 'Set completo color violeta o morado excelente calidad' },
-          { photo: '/Bras/b2-b.png', title: 'Bra blanco', stars: 4.5, price: '179', text: 'Bra sin barillas muy cómodo' },
-          { photo: '/Bras/b2-p.png', title: 'Bra marron', stars: 2, price: '179', text: 'Bra color piel' },
-          { photo: '/Bras/b3-p.png', title: 'Bra piel', stars: 5, price: '199', text: 'Bra con rallas color piel' },
-          { photo: '/Bras/b3-r.png', title: 'Bra rosa', stars: 4, price: '199', text: 'Bra color rosa' },
-          { photo: '/Bras/b4-r.png', title: 'Set rosa', stars: 4.5, price: '280', text: 'Set completo color rosa de muy buena calidad' },
-          { photo: '/Bras/b5-r.png', title: 'Set rojo', stars: 5, price: '280', text: 'Set completo color rojo muy buena calidad' },
-          { photo: '/Bras/b6-p.png', title: 'Bra vainilla', stars: 3.5, price: '190', text: 'Bra color piel, muy buena calidad' },
-          { auth: true, photo: '/Bras/b7-a.png', title: 'Set azul', stars: 5, price: '280', text: 'Set color azul, muy buena calidad y comodidad' },
-          { auth: true, photo: '/Bras/b7-p.png', title: 'Set rosa', stars: 5, price: '280', text: 'Set color rosa, muy buena calidad y comodidad' },
-          { auth: true, photo: '/Bras/b7-r.png', title: 'Set rojo', stars: 5, price: '280', text: 'Set color rojo, muy buena calidad y comodidad' },
-          { auth: true, photo: '/Bras/b7-v.png', title: 'Set violeta', stars: 4.5, price: '280', text: 'Set color violeta, muy buena calidad y comodidad' },
-          { auth: true, photo: '/Bras/b8-bn.png', title: 'Set sexy', stars: 4.5, price: '189', text: 'Set blaco o negro, muy sexy, de buena calidad' },
+          { id: '0', photo: '/Bras/b1-n.png', title: 'Set negro', stars: 3.5, price: '280', text: 'Set completo color negro muy buena calidad' },
+          { id: '1', photo: '/Bras/b1-v.png', title: 'Set violeta', stars: 3, price: '230', text: 'Set completo color violeta o morado excelente calidad' },
+          { id: '2', photo: '/Bras/b2-b.png', title: 'Bra blanco', stars: 4.5, price: '179', text: 'Bra sin barillas muy cómodo' },
+          { id: '3', photo: '/Bras/b2-p.png', title: 'Bra marron', stars: 3.5, price: '179', text: 'Bra color piel' },
+          { id: '4', photo: '/Bras/b3-p.png', title: 'Bra piel', stars: 5, price: '199', text: 'Bra con rallas color piel' },
+          { id: '5', photo: '/Bras/b3-r.png', title: 'Bra rosa', stars: 4, price: '199', text: 'Bra color rosa' },
+          { id: '6', photo: '/Bras/b4-r.png', title: 'Set rosa', stars: 4.5, price: '280', text: 'Set completo color rosa de muy buena calidad' },
+          { id: '7', photo: '/Bras/b5-r.png', title: 'Set rojo', stars: 5, price: '280', text: 'Set completo color rojo muy buena calidad' },
+          { id: '8', photo: '/Bras/b6-p.png', title: 'Bra vainilla', stars: 3.5, price: '190', text: 'Bra color piel, muy buena calidad' },
+          { id: '9', auth: true, photo: '/Bras/b7-a.png', title: 'Set azul', stars: 5, price: '280', text: 'Set color azul, muy buena calidad y comodidad' },
+          { id: '10', auth: true, photo: '/Bras/b7-p.png', title: 'Set rosa', stars: 5, price: '280', text: 'Set color rosa, muy buena calidad y comodidad' },
+          { id: '11', auth: true, photo: '/Bras/b7-r.png', title: 'Set rojo', stars: 5, price: '280', text: 'Set color rojo, muy buena calidad y comodidad' },
+          { id: '12', auth: true, photo: '/Bras/b7-v.png', title: 'Set violeta', stars: 4.5, price: '280', text: 'Set color violeta, muy buena calidad y comodidad' },
+          { id: '13', auth: true, photo: '/Bras/b8-bn.png', title: 'Set sexy', stars: 4.5, price: '189', text: 'Set blaco o negro, muy sexy, de buena calidad' },
         ],
         loggedIn: false,
         snackbar: false,
         snackbar2: false,
         nombre: '',
-        foto: ''
+        foto: '',
+        dialogCart: false,
+        idCart: '0'
       }
     },
     methods: {
@@ -236,8 +291,15 @@ import fireauth from '@/Firebase'
                 }catch (err){
                     console.log(err)
                 }
-            }
+      },
+      clickCart (event) {
+        var targetId = event.currentTarget.id;
+        //console.log('id: ', targetId);
+        this.idCart = targetId;
+        //console.log('idcart: ', this.idCart);
+      },
     },
+
   }
 
 
@@ -249,5 +311,9 @@ import fireauth from '@/Firebase'
 <style>
   .card1 {
     margin-top: 175px;
+  }
+  .precio {
+    width: 82px;
+    background-color: rgba(255, 255, 255, 0.55);
   }
 </style>
