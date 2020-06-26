@@ -33,6 +33,7 @@
 </v-flex>
 
 <v-snackbar
+  top
   multi-line
   v-model="snackbar"
   :timeout="4000"
@@ -159,9 +160,9 @@ export default {
 
   .weather-box .temp {
     display: inline-block;
-    padding: 10px;
+    padding: 30px;
     color: azure;
-    font-size: 102px;
+    font-size: 60px;
     font-weight: 900;
     
     text-shadow: 3px 6px rgba(0, 0, 0, 0.25);

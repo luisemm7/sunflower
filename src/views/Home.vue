@@ -231,7 +231,7 @@
     <!-- Carrito ↑ -->
 
     <!-- Notificaciones ↓ -->
-    <v-snackbar multi-line v-model="snackbar" :timeout="4000" color="success" rounded="pill">
+    <v-snackbar top multi-line v-model="snackbar" :timeout="4000" color="success" rounded="pill">
       Gracias por iniciar sesión.
       <template v-slot:action="{ on }">
         <v-btn v-bind="on" text @click="snackbar = false">
@@ -240,7 +240,7 @@
       </template>
     </v-snackbar>
 
-    <v-snackbar multi-line v-model="snackbar2" :timeout="4000" color="warning" rounded="pill">
+    <v-snackbar top multi-line v-model="snackbar2" :timeout="4000" color="warning" rounded="pill">
       Sesión cerrada correctamente.
       <template v-slot:action="{ on }">
         <v-btn v-bind="on" text @click="snackbar2 = false">
@@ -249,7 +249,7 @@
       </template>
     </v-snackbar>
 
-    <v-snackbar multi-line v-model="snackbar3" :timeout="2000" color="success" rounded="pill">
+    <v-snackbar top multi-line v-model="snackbar3" :timeout="2000" color="success" rounded="pill">
       Producto agregado
       <template v-slot:action="{ on }">
         <v-btn v-bind="on" text @click="snackbar3 = false">
