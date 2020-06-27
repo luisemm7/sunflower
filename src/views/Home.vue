@@ -218,13 +218,13 @@
             <v-icon>close</v-icon>
           </v-btn>
           <v-spacer></v-spacer>
-          <v-btn
+          <!-- <v-btn
             color="success"
             text
             @click="carrito = false"
           >
             I accept
-          </v-btn>
+          </v-btn> -->
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -455,9 +455,9 @@ export default {
     },
     clickCart(event) {
       var indexC = event.currentTarget.id;
-      console.log('indexC: ', indexC);
+      //console.log('indexC: ', indexC);
       this.indexCart = indexC;
-      console.log('indexCart: ', this.indexCart);
+      //console.log('indexCart: ', this.indexCart);
     },
     addCart() {
 
@@ -465,46 +465,46 @@ export default {
 
         //Obtengo el id del producto a agregar
         this.idProduct = this.products[this.indexCart].id;
-        console.log('*idProduct: ', this.idProduct);
+        //console.log('*idProduct: ', this.idProduct);
 
         //Tomo el producto a agregar por su id
         var pAgregado = this.products.find((pAgregado) => pAgregado.id == this.idProduct)
-        console.log('pAgregado: ', pAgregado);
+        //console.log('pAgregado: ', pAgregado);
 
         //Almaceno el id del producto agregado
         this.pAgregadoid = pAgregado.id;
-        console.log('*pAgregadoid: ', this.pAgregadoid);
+        //console.log('*pAgregadoid: ', this.pAgregadoid);
 
         //Agrego el producto al carrito
         this.productoagregado.push({count: pAgregado.count, id: pAgregado.id, photo: pAgregado.photo, title: pAgregado.title, stars: pAgregado.stars, price: pAgregado.price, text: pAgregado.text})
-        console.log('Primer producto agregado: ', this.productoagregado);
+        //console.log('Primer producto agregado: ', this.productoagregado);
 
         this.snackbar3 = true;
         this.carritonotificacion++;
         
         //pongo el contador a 1 para que ya no entre a este if
         this.contador = 1;
-        console.log('contador: ', this.contador);
+        //console.log('contador: ', this.contador);
      
       } else {
         //Obtengo el id del producto a agregar
         this.idProduct = this.products[this.indexCart].id;
-        console.log('*idProduct: ', this.idProduct);
+        //console.log('*idProduct: ', this.idProduct);
 
         //El error esta aqui, estaba porque puse ? '' : ''
         //si no encuentra producto con ese id se detiene aqui
         //Escaneo los agregados y Obtengo el id
-        var agregadoId = this.productoagregado.find((agregadoId) =>  (agregadoId.id == this.idProduct ? this.pAgregadoid = agregadoId.id : console.log('agregadoId*: ', this.pAgregadoid) ));
-        console.log('agregadoId**: ', this.pAgregadoid);
+        var agregadoId = this.productoagregado.find((agregadoId) =>  (agregadoId.id == this.idProduct ? this.pAgregadoid = agregadoId.id : ''/*console.log('agregadoId*: ', this.pAgregadoid)*/ ));
+        //console.log('agregadoId**: ', this.pAgregadoid);
 
         this.indexcount = this.productoagregado.indexOf(agregadoId);
-        console.log('indexcount: ', this.indexcount);
+        //console.log('indexcount: ', this.indexcount);
 
         //if para comparar si esta repetido el id
         if (this.idProduct == this.pAgregadoid) {
 
           this.productoagregado[this.indexcount].count += 1;
-          console.log('count+1');
+          //console.log('count+1');
 
           this.snackbar3 = true;
           
@@ -514,19 +514,19 @@ export default {
 
           //Obtengo el id del producto a agregar
           this.idProduct = this.products[this.indexCart].id;
-          console.log('*idProduct: ', this.idProduct);
+          //console.log('*idProduct: ', this.idProduct);
 
           //Tomo el producto a agregar por su id
           pAgregado = this.products.find((pAgregado) => pAgregado.id == this.idProduct)
-          console.log('pAgregado: ', pAgregado);
+          //console.log('pAgregado: ', pAgregado);
 
           //Almaceno el id del producto agregado
           this.pAgregadoid = pAgregado.id;
-          console.log('*pAgregadoid: ', this.pAgregadoid);
+          //console.log('*pAgregadoid: ', this.pAgregadoid);
 
           //Agrego el producto al carrito
           this.productoagregado.push({count: pAgregado.count, id: pAgregado.id, photo: pAgregado.photo, title: pAgregado.title, stars: pAgregado.stars, price: pAgregado.price, text: pAgregado.text})
-          console.log('Producto agregado: ', this.productoagregado);
+          //console.log('Producto agregado: ', this.productoagregado);
         
           this.snackbar3 = true;
           this.carritonotificacion++;
@@ -534,11 +534,11 @@ export default {
           //Obtengo el index del producto agregado con ayuda del id
           //Por si se llega a repetir el id
           //Escaneo los agregados y Obtengo el id.
-          agregadoId = this.productoagregado.find((agregadoId) =>  (agregadoId.id == this.idProduct ? this.pAgregadoid = agregadoId.id : console.log('agregadoId*: ', this.pAgregadoid) ));
-          console.log('agregadoId**: ', this.pAgregadoid);
+          agregadoId = this.productoagregado.find((agregadoId) =>  (agregadoId.id == this.idProduct ? this.pAgregadoid = agregadoId.id : ''/*console.log('agregadoId*: ', this.pAgregadoid)*/ ));
+          //console.log('agregadoId**: ', this.pAgregadoid);
 
           this.indexcount = this.productoagregado.indexOf(agregadoId);
-          console.log('indexcount: ', this.indexcount);
+          //console.log('indexcount: ', this.indexcount);
         }
         
       }
