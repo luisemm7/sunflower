@@ -188,7 +188,7 @@
     <!-- Carrito ↓ -->
     <v-dialog
       v-model="carrito"
-      width="90%"
+      width="96%"
     >
   
       <v-card>
@@ -199,15 +199,22 @@
           <v-icon class="mr-1" color="secondary">mdi-cart</v-icon> Carrito de compras
         </v-card-title>
 
-        <v-card-text v-for="producto in productoagregado" :key="producto.id">
+        <v-card-text class="pa-1" v-for="(producto, index) in productoagregado" :key="producto.id">
+          <v-layout class="ma-0" row  align-center>
           <v-avatar
-            class="ma-3"
+            class="ma-2"
             size="60"
             tile
           >
             <v-img :src="producto.photo"></v-img>
           </v-avatar>
           {{producto.title}}: <strong>{{producto.count}}</strong> x ${{producto.price}}
+          <v-spacer></v-spacer>
+
+            <v-btn @click="removeCart ($event)" :id="index" class="pa-0" text small color="error">
+              <v-icon>delete_forever</v-icon>
+            </v-btn>
+          </v-layout>
           <v-divider></v-divider>
         </v-card-text>
         
@@ -458,6 +465,10 @@ export default {
       //console.log('indexC: ', indexC);
       this.indexCart = indexC;
       //console.log('indexCart: ', this.indexCart);
+
+      if (this.productoagregado.length == 0) {
+            this.contador = 0;
+      }
     },
     addCart() {
 
@@ -502,11 +513,13 @@ export default {
 
         //if para comparar si esta repetido el id
         if (this.idProduct == this.pAgregadoid) {
-
-          this.productoagregado[this.indexcount].count += 1;
+          
+          
+          this.productoagregado[this.indexcount].count ++;
           //console.log('count+1');
 
           this.snackbar3 = true;
+          
           
         } else {
 
@@ -544,9 +557,11 @@ export default {
       }
 
     },
-    /* removeRow(index){    //ES para BORRAR un producto
-      this. itemList.splice(index, 1)
-    } */
+    removeCart (event) {
+      var indexRemove = event.currentTarget.id;
+      this.productoagregado.splice(indexRemove, 1);
+      this.carritonotificacion--;
+    }
   }
 };
 </script>
