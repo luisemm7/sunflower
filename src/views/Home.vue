@@ -221,17 +221,24 @@
         <v-divider></v-divider>
 
         <v-card-actions>
+          
           <v-btn small outlined color="error" @click="carrito = false">
             <v-icon>close</v-icon>
           </v-btn>
           <v-spacer></v-spacer>
-          <!-- <v-btn
+          <p class="ma-0" :class=" carritonotificacion != 0 ? '' : 'd-none' ">
+            Total: $ {{totalCarrito}} 
+          </p>
+          <v-spacer></v-spacer>
+          <v-btn
+            outlined
             color="success"
             text
             @click="carrito = false"
           >
             I accept
-          </v-btn> -->
+          </v-btn>
+          
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -303,7 +310,7 @@ export default {
           photo: "/Bras/b1-n.png",
           title: "Set negro",
           stars: 3.5,
-          price: "280",
+          price: 280,
           text: "Set completo color negro muy buena calidad"
         },
         {
@@ -312,7 +319,7 @@ export default {
           photo: "/Bras/b1-v.png",
           title: "Set violeta",
           stars: 3,
-          price: "230",
+          price: 230,
           text: "Set completo color violeta o morado excelente calidad"
         },
         {
@@ -321,7 +328,7 @@ export default {
           photo: "/Bras/b2-b.png",
           title: "Bra blanco",
           stars: 4.5,
-          price: "179",
+          price: 179,
           text: "Bra sin barillas muy cómodo"
         },
         {
@@ -330,7 +337,7 @@ export default {
           photo: "/Bras/b2-p.png",
           title: "Bra marron",
           stars: 3.5,
-          price: "179",
+          price: 179,
           text: "Bra color piel"
         },
         {
@@ -339,7 +346,7 @@ export default {
           photo: "/Bras/b3-p.png",
           title: "Bra piel",
           stars: 5,
-          price: "199",
+          price: 199,
           text: "Bra con rallas color piel"
         },
         {
@@ -348,7 +355,7 @@ export default {
           photo: "/Bras/b3-r.png",
           title: "Bra rosa",
           stars: 4,
-          price: "199",
+          price: 199,
           text: "Bra color rosa"
         },
         {
@@ -357,7 +364,7 @@ export default {
           photo: "/Bras/b4-r.png",
           title: "Set rosa",
           stars: 4.5,
-          price: "280",
+          price: 280,
           text: "Set completo color rosa de muy buena calidad"
         },
         {
@@ -366,7 +373,7 @@ export default {
           photo: "/Bras/b5-r.png",
           title: "Set rojo",
           stars: 5,
-          price: "280",
+          price: 280,
           text: "Set completo color rojo muy buena calidad"
         },
         {
@@ -375,7 +382,7 @@ export default {
           photo: "/Bras/b6-p.png",
           title: "Bra vainilla",
           stars: 3.5,
-          price: "190",
+          price: 190,
           text: "Bra color piel, muy buena calidad"
         },
         {
@@ -385,7 +392,7 @@ export default {
           photo: "/Bras/b7-a.png",
           title: "Set azul",
           stars: 5,
-          price: "280",
+          price: 280,
           text: "Set color azul, muy buena calidad y comodidad"
         },
         {
@@ -395,7 +402,7 @@ export default {
           photo: "/Bras/b7-p.png",
           title: "Set rosa",
           stars: 5,
-          price: "280",
+          price: 280,
           text: "Set color rosa, muy buena calidad y comodidad"
         },
         {
@@ -405,7 +412,7 @@ export default {
           photo: "/Bras/b7-r.png",
           title: "Set rojo",
           stars: 5,
-          price: "280",
+          price: 280,
           text: "Set color rojo, muy buena calidad y comodidad"
         },
         {
@@ -415,7 +422,7 @@ export default {
           photo: "/Bras/b7-v.png",
           title: "Set violeta",
           stars: 4.5,
-          price: "280",
+          price: 280,
           text: "Set color violeta, muy buena calidad y comodidad"
         },
         {
@@ -425,7 +432,7 @@ export default {
           photo: "/Bras/b8-bn.png",
           title: "Set sexy",
           stars: 4.5,
-          price: "189",
+          price: 189,
           text: "Set blaco o negro, muy sexy, de buena calidad"
         }
       ],
@@ -445,6 +452,7 @@ export default {
       pAgregadoid: '',
       indexcount: 0,
       carritonotificacion: 0,
+      totalCarrito: 0,
     };
   },
   methods: {
@@ -478,6 +486,9 @@ export default {
         this.idProduct = this.products[this.indexCart].id;
         //console.log('*idProduct: ', this.idProduct);
 
+        //Suma para el TOTAL:
+        this.totalCarrito += this.products[this.indexCart].price;
+
         //Tomo el producto a agregar por su id
         var pAgregado = this.products.find((pAgregado) => pAgregado.id == this.idProduct)
         //console.log('pAgregado: ', pAgregado);
@@ -501,6 +512,9 @@ export default {
         //Obtengo el id del producto a agregar
         this.idProduct = this.products[this.indexCart].id;
         //console.log('*idProduct: ', this.idProduct);
+
+        //Suma para el TOTAL:
+        this.totalCarrito += this.products[this.indexCart].price;
 
         //El error esta aqui, estaba porque puse ? '' : ''
         //si no encuentra producto con ese id se detiene aqui
@@ -559,6 +573,10 @@ export default {
     },
     removeCart (event) {
       var indexRemove = event.currentTarget.id;
+
+      //para el TOTAL:
+      this.totalCarrito -= (this.productoagregado[indexRemove].count * this.productoagregado[indexRemove].price);
+
       this.productoagregado.splice(indexRemove, 1);
       this.carritonotificacion--;
     }
