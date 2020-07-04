@@ -191,7 +191,7 @@
       width="96%"
     >
   
-      <v-card>
+      <v-card id="Carrito">
         <v-card-title
           class="headline grey lighten-2"
           primary-title
@@ -231,12 +231,13 @@
           </p>
           <v-spacer></v-spacer>
           <v-btn
+            :class="carritonotificacion != 0 ? '' : 'd-none'"
             outlined
             color="success"
             text
-            @click="carrito = false"
+            @click="crearPdf"
           >
-            I accept
+            Ticket
           </v-btn>
           
         </v-card-actions>
@@ -280,6 +281,7 @@
 // @ is an alias to /src
 import Popup from "@/components/Popup";
 import fireauth from "@/Firebase";
+import * as jsPDF from 'jspdf';
 
 export default {
   name: "Home",
@@ -579,6 +581,16 @@ export default {
 
       this.productoagregado.splice(indexRemove, 1);
       this.carritonotificacion--;
+    },
+    crearPdf () {
+      html2canvas(document.getElementById('Carrito'), {
+        onrendered: function (canvas) {
+          var img = canvas.toDataURL("image/png");
+          var pdf = new jsPDF();
+          pdf.addImage(img, 'JPEG',20,20);
+          pdf.save("orden.pdf");
+        }
+      });
     }
   }
 };
