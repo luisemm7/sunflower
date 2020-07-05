@@ -212,7 +212,7 @@
           <v-spacer></v-spacer>
 
             <v-btn @click="removeCart ($event)" :id="index" class="pa-0" text small color="error">
-              <v-icon>delete_forever</v-icon>
+              <v-icon id="tacha">delete_forever</v-icon>
             </v-btn>
           </v-layout>
           <v-divider></v-divider>
@@ -223,7 +223,7 @@
         <v-card-actions>
           
           <v-btn small outlined color="error" @click="carrito = false">
-            <v-icon>close</v-icon>
+            <v-icon id="close">close</v-icon>
           </v-btn>
           <v-spacer></v-spacer>
           <p class="ma-0" :class=" carritonotificacion != 0 ? '' : 'd-none' ">
@@ -231,6 +231,8 @@
           </p>
           <v-spacer></v-spacer>
           <v-btn
+            :loading="loadingT"
+            id="ticket"
             :class="carritonotificacion != 0 ? '' : 'd-none'"
             outlined
             color="success"
@@ -265,9 +267,18 @@
     </v-snackbar>
 
     <v-snackbar top multi-line v-model="snackbar3" :timeout="2000" color="success" rounded="pill">
-      Producto agregado
+      Producto agregado.
       <template v-slot:action="{ on }">
         <v-btn v-bind="on" text @click="snackbar3 = false">
+          <v-icon>cancel</v-icon>
+        </v-btn>
+      </template>
+    </v-snackbar>
+
+    <v-snackbar top multi-line v-model="snackbar4" :timeout="5000" color="light-blue accent-4" rounded="pill">
+      Orden de compra generada.
+      <template v-slot:action="{ on }">
+        <v-btn v-bind="on" text @click="snackbar4 = false">
           <v-icon>cancel</v-icon>
         </v-btn>
       </template>
@@ -442,6 +453,7 @@ export default {
       snackbar: false,
       snackbar2: false,
       snackbar3: false,
+      snackbar4: false,
       nombre: "",
       foto: "",
       dialogCart: false,
@@ -455,6 +467,7 @@ export default {
       indexcount: 0,
       carritonotificacion: 0,
       totalCarrito: 0,
+      loadingT: false,
     };
   },
   methods: {
@@ -583,14 +596,71 @@ export default {
       this.carritonotificacion--;
     },
     crearPdf () {
-      html2canvas(document.getElementById('Carrito'), {
-        onrendered: function (canvas) {
-          var img = canvas.toDataURL("image/png");
-          var pdf = new jsPDF();
-          pdf.addImage(img, 'JPEG',20,20);
-          pdf.save("orden.pdf");
-        }
-      });
+
+      this.loadingT = true
+
+      var pdf = new jsPDF()
+
+      //FOR para imagenes ↓
+      var y = 30
+      var yy = 39
+      var x = 28
+      var xx = 60
+      var xx2 = 70
+      var xl = 10
+      var yl = 48
+
+      pdf.setFontSize(22)
+      pdf.text('Orden de compra',80,18)
+
+      pdf.setFontType('italic')
+      pdf.setFontSize(12)
+      pdf.text('Lencería Sunflower',92,10)
+
+      pdf.text('El total de su pedido es: ',21,28)
+
+      pdf.setFontType('bold')
+      pdf.text('$' + this.totalCarrito,68,28)
+
+      pdf.setDrawColor(255, 0, 0)
+      pdf.line(19, 29.5, 81, 29)
+      pdf.setDrawColor(0, 0, 0)
+
+      var logof = new Image()
+      logof.src = '/Bras/sunflower2.png'
+      pdf.addImage(logof, 'PNG',86,6,5,5)
+      pdf.addImage(logof, 'PNG',129.5,6,5,5)
+
+      for (let i = 0; i < this.carritonotificacion; i++) {
+
+        var imgUrl = this.productoagregado[i].photo
+        var img = new Image()
+        img.src = imgUrl
+
+        var titulo = this.productoagregado[i].title
+        var cantidad = this.productoagregado[i].count
+        var precio = this.productoagregado[i].price
+
+        pdf.addImage(img, 'JPEG',10,y,15,15)
+
+        pdf.setFont('times')
+        pdf.setFontType('italic')
+        pdf.setFontSize(16)
+        pdf.text(titulo + ':',x,yy)
+        pdf.text(cantidad + ' x',xx,yy)
+        pdf.text('$' + precio,xx2,yy)
+        pdf.line(xl, yl, 90, yl)
+
+        y += 20
+        yy += 20
+        yl += 20
+      }
+
+      //FOR para imagenes ↑
+
+      pdf.save('ticket.pdf')
+      this.loadingT = false
+      this.snackbar4 = true
     }
   }
 };
