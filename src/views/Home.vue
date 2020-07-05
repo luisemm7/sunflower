@@ -601,7 +601,7 @@ export default {
 
       var pdf = new jsPDF()
 
-      //FOR para imagenes ↓
+      //FOR para imagenes+ ↓
       var y = 30
       var yy = 39
       var x = 28
@@ -656,7 +656,7 @@ export default {
         yl += 20
       }
 
-      //FOR para imagenes ↑
+      //FOR para imagenes+ ↑
 
       pdf.save('ticket.pdf')
       this.loadingT = false
