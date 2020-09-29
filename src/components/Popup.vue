@@ -43,7 +43,7 @@
 <script>
 
 import firebase from 'firebase/app'
-import fireauth from '@/Firebase'
+import {fireauth} from '@/Firebase'
 
 export default {
     data() {

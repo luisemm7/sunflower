@@ -98,7 +98,9 @@
       <v-flex
         xs11
         sm6
-        v-for="(product,index) in products"
+        lg4
+        xl4
+        v-for="(product) in productos"
         :key="product.id"
         :class="loggedIn === false && product.auth === true ? 'd-none' : ''"
       >
@@ -134,7 +136,7 @@
 
           <v-card-actions>
             <v-btn
-              :id="index"
+              :id="product.id"
               color="success"
               outlined
               @click="dialogCart = true;"
@@ -154,14 +156,14 @@
     <!-- PopupCart ↓ -->
     <v-dialog v-model="dialogCart" width="90%">
       <v-card class="pa-3">
-        <v-img contain class="secondary--text align-end" :src="products[indexCart].photo">
-          <v-card-title class="precio">${{products[indexCart].price}}</v-card-title>
+        <v-img contain class="secondary--text align-end" :src="productos[indexclickCart].photo">
+          <v-card-title class="precio">${{productos[indexclickCart].price}}</v-card-title>
         </v-img>
 
-        <v-card-subtitle class="pa-1">{{products[indexCart].title}}</v-card-subtitle>
+        <v-card-subtitle class="pa-1">{{productos[indexclickCart].title}}</v-card-subtitle>
 
         <v-card-text class="text--primary">
-          <div>{{products[indexCart].text}}</div>
+          <div>{{productos[indexclickCart].text}}</div>
         </v-card-text>
 
         <v-divider></v-divider>
@@ -171,15 +173,16 @@
             <v-icon>close</v-icon>
           </v-btn>
           <v-spacer></v-spacer>
-          <v-btn
-            outlined
-            medium
-            color="success"
-            text
-            @click="dialogCart = false, addCart()"
-          >
-            Agregar al carrito <v-icon>mdi-cart-plus</v-icon>
-          </v-btn>
+            <v-btn
+              :disabled="productos[indexclickCart].available === false ? true : false"
+              outlined
+              medium
+              color="success"
+              text
+              @click="dialogCart = false, addCart()"
+            >
+              Agregar al carrito <v-icon>mdi-cart-plus</v-icon>
+            </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -208,7 +211,7 @@
           >
             <v-img :src="producto.photo"></v-img>
           </v-avatar>
-          {{producto.title}}: <strong>{{producto.count}}</strong> x ${{producto.price}}
+          <p class="ma-0">{{producto.title}}: <strong>{{producto.count}}</strong> x ${{producto.price}}</p>
           <v-spacer></v-spacer>
 
             <v-btn @click="removeCart ($event)" :id="index" class="pa-0" text small color="error">
@@ -291,7 +294,11 @@
 <script>
 // @ is an alias to /src
 import Popup from "@/components/Popup";
-import fireauth from "@/Firebase";
+
+//Firebase
+import {fireauth} from "@/Firebase";
+import {db} from "@/Firebase";
+
 import * as jsPDF from 'jspdf';
 
 export default {
@@ -299,6 +306,13 @@ export default {
   components: { Popup },
 
   created() {
+
+    let ref = db.ref().child('productosf');
+
+    ref.on('value', async snap => this.productos = await snap.val());
+
+    //console.log("productos: ",this.productos);
+
     fireauth.onAuthStateChanged(user => {
       this.loggedIn = !!user;
       var user1 = fireauth.currentUser;
@@ -315,140 +329,11 @@ export default {
   },
 
   data() {
+
     return {
-      products: [
-        {
-          count: 1,
-          id: "0",
-          photo: "/Bras/b1-n.png",
-          title: "Set negro",
-          stars: 3.5,
-          price: 280,
-          text: "Set completo color negro muy buena calidad"
-        },
-        {
-          count: 1,
-          id: "1",
-          photo: "/Bras/b1-v.png",
-          title: "Set violeta",
-          stars: 3,
-          price: 230,
-          text: "Set completo color violeta o morado excelente calidad"
-        },
-        {
-          count: 1,
-          id: "2",
-          photo: "/Bras/b2-b.png",
-          title: "Bra blanco",
-          stars: 4.5,
-          price: 179,
-          text: "Bra sin barillas muy cómodo"
-        },
-        {
-          count: 1,
-          id: "3",
-          photo: "/Bras/b2-p.png",
-          title: "Bra marron",
-          stars: 3.5,
-          price: 179,
-          text: "Bra color piel"
-        },
-        {
-          count: 1,
-          id: "4",
-          photo: "/Bras/b3-p.png",
-          title: "Bra piel",
-          stars: 5,
-          price: 199,
-          text: "Bra con rallas color piel"
-        },
-        {
-          count: 1,
-          id: "5",
-          photo: "/Bras/b3-r.png",
-          title: "Bra rosa",
-          stars: 4,
-          price: 199,
-          text: "Bra color rosa"
-        },
-        {
-          count: 1,
-          id: "6",
-          photo: "/Bras/b4-r.png",
-          title: "Set rosa",
-          stars: 4.5,
-          price: 280,
-          text: "Set completo color rosa de muy buena calidad"
-        },
-        {
-          count: 1,
-          id: "7",
-          photo: "/Bras/b5-r.png",
-          title: "Set rojo",
-          stars: 5,
-          price: 280,
-          text: "Set completo color rojo muy buena calidad"
-        },
-        {
-          count: 1,
-          id: "8",
-          photo: "/Bras/b6-p.png",
-          title: "Bra vainilla",
-          stars: 3.5,
-          price: 190,
-          text: "Bra color piel, muy buena calidad"
-        },
-        {
-          count: 1,
-          id: "9",
-          auth: true,
-          photo: "/Bras/b7-a.png",
-          title: "Set azul",
-          stars: 5,
-          price: 280,
-          text: "Set color azul, muy buena calidad y comodidad"
-        },
-        {
-          count: 1,
-          id: "10",
-          auth: true,
-          photo: "/Bras/b7-p.png",
-          title: "Set rosa",
-          stars: 5,
-          price: 280,
-          text: "Set color rosa, muy buena calidad y comodidad"
-        },
-        {
-          count: 1,
-          id: "11",
-          auth: true,
-          photo: "/Bras/b7-r.png",
-          title: "Set rojo",
-          stars: 5,
-          price: 280,
-          text: "Set color rojo, muy buena calidad y comodidad"
-        },
-        {
-          count: 1,
-          id: "12",
-          auth: true,
-          photo: "/Bras/b7-v.png",
-          title: "Set violeta",
-          stars: 4.5,
-          price: 280,
-          text: "Set color violeta, muy buena calidad y comodidad"
-        },
-        {
-          count: 1,
-          id: "13",
-          auth: true,
-          photo: "/Bras/b8-bn.png",
-          title: "Set sexy",
-          stars: 4.5,
-          price: 189,
-          text: "Set blaco o negro, muy sexy, de buena calidad"
-        }
-      ],
+
+      productos: '', //datos obtenidos de firebase
+      
       loggedIn: false,
       snackbar: false,
       snackbar2: false,
@@ -457,12 +342,13 @@ export default {
       nombre: "",
       foto: "",
       dialogCart: false,
-      indexCart: "0",
+      indexclickCart: "0",
       carrito: false,
       idProduct: '',
       productoagregado: [],
       contador: 0,
-      agregadoIdId: '',
+      IDclickCart: '',
+      PE: '',
       pAgregadoid: '',
       indexcount: 0,
       carritonotificacion: 0,
@@ -470,10 +356,13 @@ export default {
       loadingT: false,
     };
   },
+
   methods: {
+
     sortBy(prop) {
-      this.products.sort((a, b) => (a[prop] < b[prop] ? -1 : 1));
+      this.productos.sort((a, b) => (a[prop] < b[prop] ? -1 : 1));
     },
+
     async signOut() {
       try {
         await fireauth.signOut();
@@ -483,109 +372,89 @@ export default {
         console.log(err);
       }
     },
+
     clickCart(event) {
-      var indexC = event.currentTarget.id;
-      //console.log('indexC: ', indexC);
-      this.indexCart = indexC;
-      //console.log('indexCart: ', this.indexCart);
+
+      //Obtengo el ID del boton (que es el mismo que el del producto)
+      this.IDclickCart = event.currentTarget.id;
+      //console.log('IDclickCart: ', this.IDclickCart);
+
+      //En el array productos busco el que tenga el IDclickCart
+      this.PE = this.productos.find(P => P.id == this.IDclickCart);
+      //console.log('PE: ', this.PE);
+
+      //Obtengo el Index del producto con el this.IDclickCart
+      this.indexclickCart = this.productos.indexOf(this.PE);
+      //console.log('indexclickCart: ', this.indexclickCart);
+      //console.log('***************************');
 
       if (this.productoagregado.length == 0) {
             this.contador = 0;
       }
+
     },
+
     addCart() {
 
       if (this.contador == 0) {
 
-        //Obtengo el id del producto a agregar
-        this.idProduct = this.products[this.indexCart].id;
-        //console.log('*idProduct: ', this.idProduct);
-
-        //Suma para el TOTAL:
-        this.totalCarrito += this.products[this.indexCart].price;
-
-        //Tomo el producto a agregar por su id
-        var pAgregado = this.products.find((pAgregado) => pAgregado.id == this.idProduct)
-        //console.log('pAgregado: ', pAgregado);
-
-        //Almaceno el id del producto agregado
-        this.pAgregadoid = pAgregado.id;
-        //console.log('*pAgregadoid: ', this.pAgregadoid);
-
         //Agrego el producto al carrito
-        this.productoagregado.push({count: pAgregado.count, id: pAgregado.id, photo: pAgregado.photo, title: pAgregado.title, stars: pAgregado.stars, price: pAgregado.price, text: pAgregado.text})
+        this.productoagregado.push({count: this.PE.count, id: this.PE.id, photo: this.PE.photo, title: this.PE.title, stars: this.PE.stars, price: this.PE.price, text: this.PE.text})
         //console.log('Primer producto agregado: ', this.productoagregado);
-
+        
+        //muestro la notificacion y la aumento
         this.snackbar3 = true;
         this.carritonotificacion++;
+
+        //Suma para el TOTAL:
+        this.totalCarrito += this.productos[this.indexclickCart].price;
         
         //pongo el contador a 1 para que ya no entre a este if
         this.contador = 1;
         //console.log('contador: ', this.contador);
      
       } else {
-        //Obtengo el id del producto a agregar
-        this.idProduct = this.products[this.indexCart].id;
-        //console.log('*idProduct: ', this.idProduct);
 
-        //Suma para el TOTAL:
-        this.totalCarrito += this.products[this.indexCart].price;
+        var igual = this.productoagregado.find(U => U.id == this.IDclickCart)
+        //console.log('var-igual: ',igual);
 
-        //El error esta aqui, estaba porque puse ? '' : ''
-        //si no encuentra producto con ese id se detiene aqui
-        //Escaneo los agregados y Obtengo el id
-        var agregadoId = this.productoagregado.find((agregadoId) =>  (agregadoId.id == this.idProduct ? this.pAgregadoid = agregadoId.id : ''/*console.log('agregadoId*: ', this.pAgregadoid)*/ ));
-        //console.log('agregadoId**: ', this.pAgregadoid);
+        var igualIndex = this.productoagregado.indexOf(igual);
+        //console.log('igualIndex: ',igualIndex);
 
-        this.indexcount = this.productoagregado.indexOf(agregadoId);
-        //console.log('indexcount: ', this.indexcount);
+        //console.log('igual.id: ',igual.id);
 
-        //if para comparar si esta repetido el id
-        if (this.idProduct == this.pAgregadoid) {
+        //if para comparar si esta repetido el id.
+        if (igualIndex != -1) {
           
-          
-          this.productoagregado[this.indexcount].count ++;
-          //console.log('count+1');
+          if (this.IDclickCart == igual.id) {
+            
+            //console.log('count+1');
+            this.productoagregado[igualIndex].count ++;
+            this.snackbar3 = true;
+            //Suma para el TOTAL
+            this.totalCarrito += this.productos[this.indexclickCart].price;
+                
+          } 
 
-          this.snackbar3 = true;
-          
-          
-        } else {
+        }else {
 
           //si el id no esta repetido entonces agregamos
-
-          //Obtengo el id del producto a agregar
-          this.idProduct = this.products[this.indexCart].id;
-          //console.log('*idProduct: ', this.idProduct);
-
-          //Tomo el producto a agregar por su id
-          pAgregado = this.products.find((pAgregado) => pAgregado.id == this.idProduct)
-          //console.log('pAgregado: ', pAgregado);
-
-          //Almaceno el id del producto agregado
-          this.pAgregadoid = pAgregado.id;
-          //console.log('*pAgregadoid: ', this.pAgregadoid);
-
-          //Agrego el producto al carrito
-          this.productoagregado.push({count: pAgregado.count, id: pAgregado.id, photo: pAgregado.photo, title: pAgregado.title, stars: pAgregado.stars, price: pAgregado.price, text: pAgregado.text})
+          this.productoagregado.push({count: this.PE.count, id: this.PE.id, photo: this.PE.photo, title: this.PE.title, stars: this.PE.stars, price: this.PE.price, text: this.PE.text})
           //console.log('Producto agregado: ', this.productoagregado);
-        
+          
+          //muestro la notificacion y la aumento
           this.snackbar3 = true;
           this.carritonotificacion++;
 
-          //Obtengo el index del producto agregado con ayuda del id
-          //Por si se llega a repetir el id
-          //Escaneo los agregados y Obtengo el id.
-          agregadoId = this.productoagregado.find((agregadoId) =>  (agregadoId.id == this.idProduct ? this.pAgregadoid = agregadoId.id : ''/*console.log('agregadoId*: ', this.pAgregadoid)*/ ));
-          //console.log('agregadoId**: ', this.pAgregadoid);
-
-          this.indexcount = this.productoagregado.indexOf(agregadoId);
-          //console.log('indexcount: ', this.indexcount);
+          //Suma para el TOTAL:
+          this.totalCarrito += this.productos[this.indexclickCart].price;
+        
         }
         
       }
 
     },
+
     removeCart (event) {
       var indexRemove = event.currentTarget.id;
 
@@ -595,6 +464,7 @@ export default {
       this.productoagregado.splice(indexRemove, 1);
       this.carritonotificacion--;
     },
+
     crearPdf () {
 
       this.loadingT = true
@@ -641,7 +511,7 @@ export default {
         var cantidad = this.productoagregado[i].count
         var precio = this.productoagregado[i].price
 
-        pdf.addImage(img, 'JPEG',10,y,15,15)
+        pdf.addImage(img, 'JPEG',10,y,15,15)//
 
         pdf.setFont('times')
         pdf.setFontType('italic')

@@ -1,5 +1,6 @@
 import firebase from 'firebase/app'
-import 'firebase/auth'
+require('firebase/auth')
+require('firebase/database')
 
 // Your web app's Firebase configuration
 var firebaseConfig = {
@@ -15,6 +16,21 @@ var firebaseConfig = {
   firebase.initializeApp(firebaseConfig);
 
   const fireauth = firebase.auth();
+  const db = firebase.database();
 
-  export default fireauth;
+  //Sync object changes
+
+  /* const dbRef = db.ref().child('productosf');
+
+  var Datos1;
+  
+  dbRef.on('value',snap => {
+    Datos1 = snap.val();
+    console.log('JS: ',Datos1);
+  });
+
+  console.log('JS2: ',Datos1); */
+
+  export {fireauth, db}
+
   

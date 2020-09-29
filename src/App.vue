@@ -9,7 +9,7 @@
           dark
           hide-on-scroll
           prominent
-          src="@/assets/girasolesbar.png"
+          src="https://firebasestorage.googleapis.com/v0/b/sunflower-v.appspot.com/o/Icons%2Fgirasolesbar.png?alt=media&token=d0675882-7d0f-44ac-83d9-a2eecba8db6e"
         >
           <template v-slot:img="{ props }">
             <v-img
