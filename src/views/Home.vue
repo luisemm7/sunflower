@@ -154,7 +154,7 @@
     <!-- Productos ↑ -->
 
     <!-- PopupCart ↓ -->
-    <v-dialog v-model="dialogCart" width="90%">
+    <v-dialog v-model="dialogCart" width="90%" max-width="700">
       <v-card class="pa-3">
         <v-img contain class="secondary--text align-end" :src="productos[indexclickCart].photo">
           <v-card-title class="precio">${{productos[indexclickCart].price}}</v-card-title>
@@ -278,7 +278,7 @@
       </template>
     </v-snackbar>
 
-    <v-snackbar top multi-line v-model="snackbar4" :timeout="5000" color="light-blue accent-4" rounded="pill">
+    <v-snackbar top multi-line v-model="snackbar4" :timeout="9000" color="light-blue accent-4" rounded="pill">
       Orden de compra generada.
       <template v-slot:action="{ on }">
         <v-btn v-bind="on" text @click="snackbar4 = false">
@@ -399,7 +399,7 @@ export default {
       if (this.contador == 0) {
 
         //Agrego el producto al carrito
-        this.productoagregado.push({count: this.PE.count, id: this.PE.id, photo: this.PE.photo, title: this.PE.title, stars: this.PE.stars, price: this.PE.price, text: this.PE.text})
+        this.productoagregado.push({count: this.PE.count, id: this.PE.id, photo: this.PE.photo, title: this.PE.title, stars: this.PE.stars, price: this.PE.price, text: this.PE.text, img: this.PE.img})
         //console.log('Primer producto agregado: ', this.productoagregado);
         
         //muestro la notificacion y la aumento
@@ -439,7 +439,7 @@ export default {
         }else {
 
           //si el id no esta repetido entonces agregamos
-          this.productoagregado.push({count: this.PE.count, id: this.PE.id, photo: this.PE.photo, title: this.PE.title, stars: this.PE.stars, price: this.PE.price, text: this.PE.text})
+          this.productoagregado.push({count: this.PE.count, id: this.PE.id, photo: this.PE.photo, title: this.PE.title, stars: this.PE.stars, price: this.PE.price, text: this.PE.text, img: this.PE.img})
           //console.log('Producto agregado: ', this.productoagregado);
           
           //muestro la notificacion y la aumento
@@ -503,7 +503,7 @@ export default {
 
       for (let i = 0; i < this.carritonotificacion; i++) {
 
-        var imgUrl = this.productoagregado[i].photo
+        var imgUrl = this.productoagregado[i].img
         var img = new Image()
         img.src = imgUrl
 
@@ -531,6 +531,7 @@ export default {
       pdf.save('ticket.pdf')
       this.loadingT = false
       this.snackbar4 = true
+      this.carrito = false
     }
   }
 };
