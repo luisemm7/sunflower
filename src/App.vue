@@ -58,8 +58,11 @@
             <v-btn
               v-for="icon in social"
               :key="icon.icon"
+              :color="icon.color"
               class="ml-3"
-              icon
+              :class="icon.cc"
+              fab
+              x-small
               :href="icon.route" target="_blank"
             >
               <v-icon size="24px">{{ icon.icon }}</v-icon>
@@ -81,10 +84,21 @@ export default {
 
   data: () => ({
     social: [
-        {icon: 'mdi-facebook', route: 'https://www.facebook.com/pages/category/Clothing--Brand-/Lencer%C3%ADa-Sunflower-Underwear-519792908494757/'},
-        {icon: 'mdi-youtube', route: 'https://www.youtube.com/channel/UCWOZoA7FY1Ef_3FfaUBrreQ'},
-        {icon: 'mdi-instagram', route: 'https://instagram.com/lenceria_sunflowermx?igshid=1thhjx9kde20d'}
+        {color: 'blue darken-2', icon: 'mdi-facebook', route: 'https://www.facebook.com/pages/category/Clothing--Brand-/Lencer%C3%ADa-Sunflower-Underwear-519792908494757/'},
+        {color: 'red darken-2', icon: 'mdi-youtube', route: 'https://www.youtube.com/channel/UCWOZoA7FY1Ef_3FfaUBrreQ'},
+        {cc: 'insta',color: '', icon: 'mdi-instagram', route: 'https://instagram.com/lenceria_sunflowermx?igshid=1thhjx9kde20d'}
       ],
   }),
 };
 </script>
+
+<style>
+
+  .insta {
+    background: #833ab4;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #fcb045, #fd1d1d, #833ab4);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #fcb045, #fd1d1d, #833ab4); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+  }
+
+</style>

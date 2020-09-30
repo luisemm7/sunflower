@@ -137,7 +137,7 @@
           <v-card-actions>
             <v-btn
               :id="product.id"
-              color="success"
+              :color="product.available === false ? 'blue-grey lighten-4' : 'success'"
               outlined
               @click="dialogCart = true;"
               v-on:click="clickCart($event)"
@@ -164,6 +164,7 @@
 
         <v-card-text class="text--primary">
           <div>{{productos[indexclickCart].text}}</div>
+          <p v-if="productos[indexclickCart].available === false" class="ma-0 blue-grey--text">No disponible por el momento, para más información contactenos en nuestras redes sociales.</p>
         </v-card-text>
 
         <v-divider></v-divider>
