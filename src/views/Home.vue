@@ -65,10 +65,11 @@
           <!-- Ordenador/sorter ↓ -->
           <p class="mt-2 mb-0 grey--text">Ordenar los productos:</p>
           <v-layout row justify-center>
+
             <v-tooltip top>
               <template v-slot:activator="{ on }">
-                <v-btn text color="grey" @click="sortBy('price')" v-on="on">
-                  <v-icon left>monetization_on</v-icon>
+                <v-btn class="pl-1 pr-1" text color="grey" @click="sortByPrice('price')" v-on="on">
+                  <v-icon class="ma-0" left>monetization_on</v-icon>
                   <span class="caption text-capitalize">Por precio</span>
                 </v-btn>
               </template>
@@ -77,13 +78,24 @@
 
             <v-tooltip top>
               <template v-slot:activator="{ on }">
-                <v-btn text color="grey" @click="sortBy('stars')" v-on="on">
-                  <v-icon left>stars</v-icon>
+                <v-btn class="pl-1 pr-1" text color="grey" @click="sortByStarts('stars')" v-on="on">
+                  <v-icon class="ma-0" left>stars</v-icon>
                   <span class="caption text-capitalize">Por puntaje</span>
                 </v-btn>
               </template>
               <span>Ordenar por estrellas</span>
             </v-tooltip>
+
+            <v-tooltip top>
+              <template v-slot:activator="{ on }">
+                <v-btn class="pl-1 pr-1" text color="grey" @click="sortByD('available')" v-on="on">
+                  <v-icon class="ma-0" left>check_circle</v-icon>
+                  <span class="caption text-capitalize">Disponibles</span>
+                </v-btn>
+              </template>
+              <span>Disponibles</span>
+            </v-tooltip>
+
           </v-layout>
           <!-- Ordenador/sorter ↑ -->
         </v-card>
@@ -193,6 +205,7 @@
     <v-dialog
       v-model="carrito"
       width="96%"
+      max-width="700"
     >
   
       <v-card id="Carrito">
@@ -235,21 +248,106 @@
           </p>
           <v-spacer></v-spacer>
           <v-btn
-            :loading="loadingT"
             id="ticket"
             :class="carritonotificacion != 0 ? '' : 'd-none'"
             outlined
             color="success"
             text
-            @click="crearPdf"
+            @click="formulario = true"
           >
-            Ticket
+            Ticket <v-icon>receipt</v-icon>
           </v-btn>
           
         </v-card-actions>
       </v-card>
     </v-dialog>
     <!-- Carrito ↑ -->
+
+    <!-- Formulario ↓ -->
+
+    <v-dialog v-model="formulario" max-width="600">
+      <v-card>
+        <v-card-title class="pa-2 headline grey lighten-2">
+          <span>Formulario</span> <v-icon class="ml-1" color="secondary">mdi-book-open-variant</v-icon>
+        </v-card-title>
+        <v-form
+          class="ma-2"
+          ref="form"
+          v-model="valid"
+        >
+          <v-text-field
+            prepend-inner-icon="mdi-account-arrow-right"
+            v-model="name"
+            :rules="reglasName"
+            label="Nombre"
+            required
+          ></v-text-field>
+          <v-text-field
+            prepend-inner-icon="mdi-account-arrow-right-outline"
+            v-model="apellido"
+            :rules="reglasApellido"
+            label="Apellido"
+            required
+          ></v-text-field>
+          <v-text-field
+            prepend-inner-icon="mdi-home-city"
+            v-model="colonia"
+            :rules="reglasDireccion"
+            label="Colonia"
+            required
+          ></v-text-field>
+          <v-text-field
+            prepend-inner-icon="mdi-home"
+            v-model="calle"
+            :rules="reglasDireccion"
+            label="Calle y número"
+            required
+          ></v-text-field>
+          <v-text-field
+            prepend-inner-icon="mdi-home-map-marker"
+            v-model="codigopostal"
+            :rules="reglasCodigo"
+            label="Código postal"
+            required
+          ></v-text-field>
+          <v-text-field
+            prepend-inner-icon="mdi-cellphone-iphone"
+            v-model="telefono"
+            :rules="reglasTelefono"
+            label="Teléfono"
+            required
+          ></v-text-field>
+          <v-text-field
+            prepend-inner-icon="mdi-at"
+            v-model="email"
+            :rules="reglasEmail"
+            label="E-mail"
+            required
+          ></v-text-field>
+
+          <v-card-actions>
+          <v-btn small outlined color="error" @click="formulario = false">
+            <v-icon>close</v-icon>
+          </v-btn>
+          <v-spacer></v-spacer>
+          <v-btn
+            :loading="loadingT"
+            small
+            outlined
+            :disabled="!valid"
+            color="success"
+            class="ma-2"
+            @click="crearPdf"
+          >
+            Aceptar <v-icon>mdi-file-download-outline</v-icon>
+          </v-btn>
+          </v-card-actions>
+
+        </v-form>
+      </v-card>
+    </v-dialog>
+
+    <!-- Formulario ↑ -->
 
     <!-- Notificaciones ↓ -->
     <v-snackbar top multi-line v-model="snackbar" :timeout="4000" color="success" rounded="pill">
@@ -279,7 +377,7 @@
       </template>
     </v-snackbar>
 
-    <v-snackbar top multi-line v-model="snackbar4" :timeout="9000" color="light-blue accent-4" rounded="pill">
+    <v-snackbar top multi-line v-model="snackbar4" color="light-blue accent-4" rounded="pill">
       Orden de compra generada.
       <template v-slot:action="{ on }">
         <v-btn v-bind="on" text @click="snackbar4 = false">
@@ -355,13 +453,56 @@ export default {
       carritonotificacion: 0,
       totalCarrito: 0,
       loadingT: false,
+
+      formulario: false,
+      valid: false,
+      name: '',
+      apellido: '',
+      colonia: '',
+      calle: '',
+      codigopostal: '',
+      telefono: '',
+      email: '',
+      reglasEmail: [
+        v => !!v || 'Ingrese un E-mail',
+        v => /.+@.+\..+/.test(v) || 'Ingrese un E-mail válido',
+      ],
+      reglasName: [
+        v => !!v || 'Ingrese un Nombre',
+        v => (v && v.length >= 2) || 'Ingrese un Nombre válido',
+      ],
+      reglasApellido: [
+        v => !!v || 'Ingrese un Apellido',
+        v => (v && v.length >= 2) || 'Ingrese un Apellido válido',
+      ],
+      reglasDireccion: [
+        v => !!v || 'Ingrese una Dirección',
+        v => (v && v.length >= 4) || 'Ingrese una Dirección válida',
+      ],
+      reglasCodigo: [
+        v => !!v || 'Ingrese un código postal',
+        v => /([0-9]{4})/.test(v) || 'Ingrese un código postal válido',
+      ],
+      reglasTelefono: [
+        v => !!v || 'Ingrese un Teléfono',
+        v => (v && v.length >= 6) || 'Ingrese un Teléfono con 10 dígitos',
+        v => /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/.test(v) || 'Ingrese un Teléfono válido',
+      ],
     };
   },
 
   methods: {
 
-    sortBy(prop) {
+    sortByStarts(prop) {
+      this.productos.sort((a, b) => (a[prop] < b[prop] ? 1 : -1));
+    },
+
+    sortByPrice(prop) {
       this.productos.sort((a, b) => (a[prop] < b[prop] ? -1 : 1));
+    },
+
+    sortByD(prop) {
+      this.productos.sort((a, b) => (a[prop] != b[prop] ? -1 : 1));
     },
 
     async signOut() {
@@ -466,21 +607,59 @@ export default {
       this.carritonotificacion--;
     },
 
-    crearPdf () {
+    crearPdf() {
 
       this.loadingT = true
 
       var pdf = new jsPDF()
 
+      //Datos ↓
+
+      pdf.setFontSize(16)
+      pdf.text('Datos del usuario: ',140,28)
+      pdf.setFontType('italic')
+      pdf.setFontSize(12)
+      pdf.text('Nombre: ',114,38)
+      pdf.setFontType('normal')
+      pdf.text(this.name,133,38)
+      pdf.setFontType('italic')
+      pdf.text('Apellido: ',114,48)
+      pdf.setFontType('normal')
+      pdf.text(this.apellido,133,48)
+      pdf.setFontType('italic')
+      pdf.text('Colonia: ',115,58)
+      pdf.setFontType('normal')
+      pdf.text(this.colonia,133,58)
+      pdf.setFontType('italic')
+      pdf.text('Calle y núm. : ',104,68)
+      pdf.setFontType('normal')
+      pdf.text(this.calle,133,68)
+      pdf.setFontType('italic')
+      pdf.text('Código postal: ',103,78)
+      pdf.setFontType('normal')
+      pdf.text(this.codigopostal,133,78)
+      pdf.setFontType('italic')
+      pdf.text('Teléfono: ',112,88)
+      pdf.setFontType('normal')
+      pdf.text(this.telefono,133,88)
+      pdf.setFontType('italic')
+      pdf.text('E-mail: ',117,98)
+      pdf.setFontType('normal')
+      pdf.text(this.email,133,98)
+
+      //Datos ↑
+
       //FOR para imagenes+ ↓
       var y = 30
       var yy = 39
       var x = 28
-      var xx = 60
-      var xx2 = 70
+      var xx = 67
+      var xx2 = 77
       var xl = 10
       var yl = 48
 
+      pdf.setFont('helvetica')
+      pdf.setFontType('normal')
       pdf.setFontSize(22)
       pdf.text('Orden de compra',80,18)
 
@@ -494,7 +673,7 @@ export default {
       pdf.text('$' + this.totalCarrito,68,28)
 
       pdf.setDrawColor(255, 0, 0)
-      pdf.line(19, 29.5, 81, 29)
+      pdf.line(19, 29.5, 81, 29.5) // x,y,x2,y2
       pdf.setDrawColor(0, 0, 0)
 
       var logof = new Image()
@@ -532,6 +711,7 @@ export default {
       pdf.save('ticket.pdf')
       this.loadingT = false
       this.snackbar4 = true
+      this.formulario = false
       this.carrito = false
     }
   }
