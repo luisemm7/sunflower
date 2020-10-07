@@ -271,11 +271,13 @@
           <span>Formulario</span> <v-icon class="ml-1" color="secondary">mdi-book-open-variant</v-icon>
         </v-card-title>
         <v-form
+          @submit.prevent="crearPdf"
           class="ma-2"
           ref="form"
           v-model="valid"
         >
           <v-text-field
+            name="name"
             prepend-inner-icon="mdi-account-arrow-right"
             v-model="name"
             :rules="reglasName"
@@ -283,6 +285,7 @@
             required
           ></v-text-field>
           <v-text-field
+            name="lsname"
             prepend-inner-icon="mdi-account-arrow-right-outline"
             v-model="apellido"
             :rules="reglasApellido"
@@ -290,6 +293,7 @@
             required
           ></v-text-field>
           <v-text-field
+            name="colonia"
             prepend-inner-icon="mdi-home-city"
             v-model="colonia"
             :rules="reglasDireccion"
@@ -297,6 +301,7 @@
             required
           ></v-text-field>
           <v-text-field
+            name="calle"
             prepend-inner-icon="mdi-home"
             v-model="calle"
             :rules="reglasDireccion"
@@ -304,6 +309,7 @@
             required
           ></v-text-field>
           <v-text-field
+            name="codigo"
             prepend-inner-icon="mdi-home-map-marker"
             v-model="codigopostal"
             :rules="reglasCodigo"
@@ -311,6 +317,7 @@
             required
           ></v-text-field>
           <v-text-field
+            name="telefono"
             prepend-inner-icon="mdi-cellphone-iphone"
             v-model="telefono"
             :rules="reglasTelefono"
@@ -318,6 +325,7 @@
             required
           ></v-text-field>
           <v-text-field
+            name="email"
             prepend-inner-icon="mdi-at"
             v-model="email"
             :rules="reglasEmail"
@@ -337,7 +345,7 @@
             :disabled="!valid"
             color="success"
             class="ma-2"
-            @click="crearPdf"
+            type="submit"
           >
             Aceptar <v-icon>mdi-file-download-outline</v-icon>
           </v-btn>
@@ -399,6 +407,8 @@ import {fireauth} from "@/Firebase";
 import {db} from "@/Firebase";
 
 import * as jsPDF from 'jspdf';
+
+import emailjs from 'emailjs-com';
 
 export default {
   name: "Home",
@@ -607,7 +617,7 @@ export default {
       this.carritonotificacion--;
     },
 
-    crearPdf() {
+    crearPdf(e) {
 
       this.loadingT = true
 
@@ -713,6 +723,14 @@ export default {
       this.snackbar4 = true
       this.formulario = false
       this.carrito = false
+
+      //EmailJS
+       emailjs.sendForm(process.env.VUE_APP_MY_EMAILJS_ID, process.env.VUE_APP_MY_EMAILJS_IDT, e.target, process.env.VUE_APP_MY_EMAILJS_IDU)
+        /* .then((result) => {
+            console.log('SUCCESS!', result.status, result.text);
+        }, (error) => {
+            console.log('FAILED...', error);
+        }); */
     }
   }
 };
