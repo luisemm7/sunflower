@@ -63,8 +63,8 @@
           <!-- Boton carrito ↑ -->
 
           <!-- Ordenador/sorter ↓ -->
-          <p class="mt-2 mb-0 grey--text">Ordenar los productos:</p>
-          <v-layout row justify-center>
+          <p class="mt-0 mb-0 grey--text">Ordenar los productos:</p>
+          <v-layout row justify-center class="pb-3">
 
             <v-tooltip top>
               <template v-slot:activator="{ on }">
@@ -166,8 +166,8 @@
     <!-- Productos ↑ -->
 
     <!-- PopupCart ↓ -->
-    <v-dialog v-model="dialogCart" width="90%" max-width="700">
-      <v-card class="pa-3">
+    <v-dialog v-model="dialogCart" width="96%" max-width="700">
+      <v-card class="pa-1">
         <v-img contain class="secondary--text align-end" :src="productos[indexclickCart].photo">
           <v-card-title class="precio">${{productos[indexclickCart].price}}</v-card-title>
         </v-img>
@@ -181,7 +181,7 @@
 
         <v-divider></v-divider>
 
-        <v-card-actions>
+        <v-card-actions class="pa-0 pt-2 pb-1">
           <v-btn small outlined color="error" @click="dialogCart = false">
             <v-icon>close</v-icon>
           </v-btn>
@@ -210,7 +210,7 @@
   
       <v-card id="Carrito">
         <v-card-title
-          class="headline grey lighten-2"
+          class="headline grey lighten-2 pa-2"
           primary-title
         >
           <v-icon class="mr-1" color="secondary">mdi-cart</v-icon> Carrito de compras
@@ -739,6 +739,10 @@ export default {
 
 
 <style>
+.v-dialog--active {
+  margin-right: 10px;
+  margin-left: 10px;
+}
 .card1 {
   margin-top: 175px;
 }

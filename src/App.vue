@@ -36,6 +36,23 @@
 
     <v-main>
       <v-container>
+        <!-- BTN Scroll ↓ -->
+          <v-btn
+            class="mb-7"
+            small
+            v-scroll="onScroll"
+            v-show="fab"
+            fab
+            dark
+            fixed
+            bottom
+            right
+            color="primary"
+            @click="toTop"
+          >
+            <v-icon>keyboard_arrow_up</v-icon>
+          </v-btn>
+        <!-- BTN Scroll ↑ -->
         <router-view/>
       </v-container>
     </v-main>
@@ -52,7 +69,7 @@
           tile
         >
 
-          <v-card-text class="py-2 gray--text text-center secondary">
+          <v-card-text class="pa-1 gray--text text-center secondary">
             {{ new Date().getFullYear() }} — <strong>Lencería Sunflower</strong>
             
             <v-btn
@@ -88,7 +105,18 @@ export default {
         {color: 'red darken-2', icon: 'mdi-youtube', route: 'https://www.youtube.com/channel/UCWOZoA7FY1Ef_3FfaUBrreQ'},
         {cc: 'insta',color: '', icon: 'mdi-instagram', route: 'https://instagram.com/lenceria_sunflowermx?igshid=1thhjx9kde20d'}
       ],
+    fab: false
   }),
+  methods: {
+    onScroll (e) {
+      if (typeof window === 'undefined') return
+      const top = window.pageYOffset ||   e.target.scrollTop || 0
+      this.fab = top > 20
+    },
+    toTop () {
+      this.$vuetify.goTo(0)
+    }
+  }
 };
 </script>
 
