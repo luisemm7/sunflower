@@ -151,7 +151,7 @@
               :id="product.id"
               :color="product.available === false ? 'blue-grey lighten-4' : 'success'"
               outlined
-              @click="dialogCart = true;"
+              @click="dialogCart = true, talla = 0"
               v-on:click="clickCart($event)"
             >
               <v-icon>shopping_cart</v-icon>
@@ -172,6 +172,8 @@
           <v-card-title class="precio">${{productos[indexclickCart].price}}</v-card-title>
         </v-img>
 
+        <v-divider></v-divider>
+
         <v-card-subtitle class="pa-1">{{productos[indexclickCart].title}}</v-card-subtitle>
 
         <v-card-text class="text--primary">
@@ -179,15 +181,26 @@
           <p v-if="productos[indexclickCart].available === false" class="ma-0 blue-grey--text">No disponible por el momento, para más información contactenos en nuestras redes sociales.</p>
         </v-card-text>
 
+        <v-select
+          v-model="talla"
+          v-if="productos[indexclickCart].available != false"
+          :items="productos[indexclickCart].talla"
+          label="Talla"
+          dense
+          outlined
+          prepend-inner-icon="mdi-ruler-square"
+        >
+        </v-select>
+
         <v-divider></v-divider>
 
         <v-card-actions class="pa-0 pt-2 pb-1">
-          <v-btn small outlined color="error" @click="dialogCart = false">
+          <v-btn small outlined color="error" @click="dialogCart = false, talla = 0">
             <v-icon>close</v-icon>
           </v-btn>
           <v-spacer></v-spacer>
             <v-btn
-              :disabled="productos[indexclickCart].available === false ? true : false"
+              :disabled="productos[indexclickCart].available === false || talla === 0 ? true : false"
               outlined
               medium
               color="success"
@@ -441,6 +454,8 @@ export default {
 
     return {
 
+      talla: 0,
+
       productos: '', //datos obtenidos de firebase
       
       loggedIn: false,
@@ -551,7 +566,7 @@ export default {
       if (this.contador == 0) {
 
         //Agrego el producto al carrito
-        this.productoagregado.push({count: this.PE.count, id: this.PE.id, photo: this.PE.photo, title: this.PE.title, stars: this.PE.stars, price: this.PE.price, text: this.PE.text, img: this.PE.img})
+        this.productoagregado.push({talla: this.talla,count: this.PE.count, id: this.PE.id, photo: this.PE.photo, title: this.PE.title, stars: this.PE.stars, price: this.PE.price, text: this.PE.text, img: this.PE.img})
         //console.log('Primer producto agregado: ', this.productoagregado);
         
         //muestro la notificacion y la aumento
@@ -580,6 +595,8 @@ export default {
           
           if (this.IDclickCart == igual.id) {
             
+            this.productoagregado[igualIndex].talla += ','+this.talla;
+            console.log('Producto agregado: ', this.productoagregado);
             //console.log('count+1');
             this.productoagregado[igualIndex].count ++;
             this.snackbar3 = true;
@@ -591,7 +608,7 @@ export default {
         }else {
 
           //si el id no esta repetido entonces agregamos
-          this.productoagregado.push({count: this.PE.count, id: this.PE.id, photo: this.PE.photo, title: this.PE.title, stars: this.PE.stars, price: this.PE.price, text: this.PE.text, img: this.PE.img})
+          this.productoagregado.push({talla: this.talla, count: this.PE.count, id: this.PE.id, photo: this.PE.photo, title: this.PE.title, stars: this.PE.stars, price: this.PE.price, text: this.PE.text, img: this.PE.img})
           //console.log('Producto agregado: ', this.productoagregado);
           
           //muestro la notificacion y la aumento
@@ -604,6 +621,8 @@ export default {
         }
         
       }
+
+      this.talla = 0;
 
     },
 
@@ -700,8 +719,15 @@ export default {
         var titulo = this.productoagregado[i].title
         var cantidad = this.productoagregado[i].count
         var precio = this.productoagregado[i].price
+        var talla = this.productoagregado[i].talla
 
         pdf.addImage(img, 'JPEG',10,y,15,15)//
+
+        pdf.setFont('times')
+        pdf.setFontType('italic')
+        pdf.setFontSize(10)
+        pdf.text('Talla: ',x,6+yy)
+        pdf.text(talla,10+x,6+yy)
 
         pdf.setFont('times')
         pdf.setFontType('italic')
@@ -725,7 +751,7 @@ export default {
       this.carrito = false
 
       //EmailJS
-       emailjs.sendForm(process.env.VUE_APP_MY_EMAILJS_ID, process.env.VUE_APP_MY_EMAILJS_IDT, e.target, process.env.VUE_APP_MY_EMAILJS_IDU)
+      emailjs.sendForm(process.env.VUE_APP_MY_EMAILJS_ID, process.env.VUE_APP_MY_EMAILJS_IDT, e.target, process.env.VUE_APP_MY_EMAILJS_IDU)
         /* .then((result) => {
             console.log('SUCCESS!', result.status, result.text);
         }, (error) => {
