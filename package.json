@@ -11,7 +11,7 @@
     "core-js": "^3.6.5",
     "emailjs-com": "^2.6.3",
     "firebase": "^7.17.1",
-    "jspdf": "^1.5.3",
+    "jspdf": "^2.5.1",
     "material-design-icons-iconfont": "^5.0.1",
     "roboto-fontface": "*",
     "vue": "^2.6.11",
